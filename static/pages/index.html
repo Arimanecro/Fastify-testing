@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Fastify</h1>
+    <h2>Send as JSON</h2>
+    <form method="post" name="info">
+      <label for="name">Name: </label><br />
+      <input type="text" name="name" /><br /><br />
+      <label for="message">Message: </label><br />
+      <textarea type="text" name="message"></textarea><br />
+      <button type="submit" id="send">Send</button>
+    </form>
+    <h2>Send as x-www-form-urlencoded</h2>
+    <form action="/x-www-form" method="post" name="x-www">
+      <label for="name">Name: </label><br />
+      <input type="text" name="name" /><br /><br />
+      <label for="message">Message: </label><br />
+      <textarea type="text" name="message"></textarea><br />
+      <button type="submit" id="send">Send</button>
+    </form>
+    <h2>Send as multipart/form-data</h2>
+    <form
+      action="/registration"
+      method="post"
+      name="reg"
+      enctype="multipart/form-data"
+    >
+      <label for="username">Username: </label>
+      <input type="text" name="username" /><br /><br />
+      <label for="password">Password: </label>
+      <input type="password" name="password" /><br /><br />
+      <label for="email">Email: </label>
+      <input type="email" name="email" /><br /><br />
+      <input type="file" name="avatar" /><br /><br />
+      <button type="submit" id="reg">Send</button>
+    </form>
+    <h2>JWT</h2>
+    <form action="/login" method="post" name="jwt">
+      <label for="username">Username: </label>
+      <input type="text" name="username" /><br /><br />
+      <label for="password">Password: </label>
+      <input type="password" name="password" /><br /><br />
+      <button type="submit" id="reg">Send</button>
+    </form>
+    <script>
+      const f = document.forms.info;
+      const j = document.forms.jwt;
+      f.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Array.from(formData.entries()).reduce(
+          (memo, [key, value]) => ({
+            ...memo,
+            [key]: value,
+          }),
+          {}
+        );
+        fetch("/", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then((response) =>
+            response.status === 400 ? response.text() : response.json()
+          )
+          .then((msg) => console.log(msg))
+          .catch((err) => console.error(err));
+      });
+
+      j.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Array.from(formData.entries()).reduce(
+          (memo, [key, value]) => ({
+            ...memo,
+            [key]: value,
+          }),
+          {}
+        );
+        fetch("/login", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+          .then((response) => console.log(response.status))
+          .catch((err) => console.error(err));
+      });
+    </script>
+  </body>
+</html>
