@@ -1,7 +1,8 @@
 # Fastify-testing
 
 Testing sending data as:
-✅ JSON,
+✅ JSON
+
 ✅ x-www-form-urlencoded
 ✅ multipart/form-data
 ✅ JWT
