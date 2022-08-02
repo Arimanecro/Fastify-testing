@@ -1,0 +1,2 @@
+# Fastify-testing
+Useful cases
